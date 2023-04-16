@@ -1,0 +1,24 @@
+# Delployment file
+# A Deployment provides declarative updates for Pods and ReplicaSets.
+
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: spring-kafka-producer-app  		# Deployment name
+  namespace: micro-process
+spec:
+  selector:
+    matchLabels:
+      app: spring-kafka-producer-app
+  replicas: 1 				# Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: spring-kafka-producer-app
+    spec:
+      containers:
+        - name: spring-kafka-producer-app
+          image: spring-kafka-producer-img 	# Image that will be used to containers in the cluster
+          imagePullPolicy: Never  	# another option is IfNotPresent
+          ports:
+            - containerPort: 8080 	# The port that the container is running on in the cluster
