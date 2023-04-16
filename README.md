@@ -22,8 +22,7 @@ To try it using minikube:
 - $> eval $(minikube docker-env)  # right before buiding the image
 - $> docker build -t spring-kafka-producer-img .
 - $> k apply -f ./manifest
-- $> k get services
-- $> minikube service spring-kafka-producer-service
-
+- $> k get services -n micro-process
+- $> minikube service spring-kafka-producer-service -n micro-process
 - $> curl curl http://SERVICE:PORT/app/hello
 
