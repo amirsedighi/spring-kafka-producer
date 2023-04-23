@@ -22,7 +22,7 @@ public class PublishController {
     {
         // Sending the message
         kafkaTemplate.send(TOPIC, message);
-        log.info("Published Successfully: {}", message);
+        log.info("message produced: {}", message);
         return "Published Successfully";
     }
 }
