@@ -5,12 +5,12 @@ apiVersion: apps/v1
 kind: Deployment # Kubernetes resource kind we are creating
 metadata:
   name: spring-kafka-producer-app  		# Deployment name
-  namespace: micro-process
+  namespace: micro
 spec:
   selector:
     matchLabels:
       app: spring-kafka-producer-app
-  replicas: 2 				# Number of replicas that will be created for this deployment
+  replicas: 1 				# Number of replicas that will be created for this deployment
   template:
     metadata:
       labels:
