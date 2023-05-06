@@ -10,7 +10,7 @@ spec:
   selector:
     matchLabels:
       app: spring-kafka-producer-app
-  replicas: 3 				# Number of replicas that will be created for this deployment
+  replicas: 3			# Number of replicas that will be created for this deployment
   template:
     metadata:
       labels:

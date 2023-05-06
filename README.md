@@ -19,10 +19,10 @@ To try it using minikube:
 - $> minikube start
 - $> minikube dashboard
 - $> k cluster-info                           # Optional
-- $> eval $(minikube docker-env)  # right before buiding the image
+- $> eval $(minikube docker-env)  # right before building the image
 - $> docker build -t spring-kafka-producer-img .
 - $> k apply -f ./manifest
-- $> k get services -n micro-process
-- $> minikube service spring-kafka-producer-service -n micro-process
+- $> k get services -n micro
+- $> minikube service spring-kafka-producer-service -n micro
 - $> curl curl http://SERVICE:PORT/app/hello
 
