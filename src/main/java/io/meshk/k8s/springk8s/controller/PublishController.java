@@ -25,16 +25,21 @@ public class PublishController {
                                  final String message)
     {
 
-        log.info("Message: {}, {}", message, metrics.decorate(metrics.HTTP_GET, true));
+        log.info(metrics.decorate(metrics.HTTP_GET, true));
 
-        log.info("Message received by PRODUCER");
+        log.info("This line of log not supposed to be used for metrics purposes. request: {}", message);
 
         String transformed = getProcessed(message);
 
-        kafkaTemplate.send(TOPIC, transformed);
-        log.info("Message: {}, {}", transformed,  metrics.decorate(metrics.KAFKA_WRITE, true));
+        try {
+            kafkaTemplate.send(TOPIC, transformed);
+            log.info(metrics.decorate(metrics.KAFKA_WRITE, true));
+        } catch (Exception ex) {
+            log.error(metrics.decorate(metrics.KAFKA_WRITE, false));
+        }
 
-        return "Published";
+
+        return "done";
 
     }
 
