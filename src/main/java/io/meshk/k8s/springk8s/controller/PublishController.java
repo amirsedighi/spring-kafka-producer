@@ -1,7 +1,9 @@
 package io.meshk.k8s.springk8s.controller;
 
-import io.meshk.k8s.springk8s.metrics.Metrics;
+import io.meshk.k8s.springk8s.metrics.MxError;
+import io.meshk.k8s.springk8s.metrics.MxEvent;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,41 +13,41 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 public class PublishController {
-    @Autowired KafkaTemplate<String, String> kafkaTemplate;
-
     @Autowired
-    Metrics metrics;
+    KafkaTemplate<String, String> kafkaTemplate;
+
 
     @Value("${spring.kafka.topic}")
     String TOPIC;
 
     // Publish messages using the GetMapping
     @GetMapping("/publish/{message}")
-    public String publishMessage(@PathVariable("message")
-                                 final String message)
-    {
+    public String publishMessage(@PathVariable("message") final String message) {
 
-        log.info(metrics.decorate(metrics.HTTP_GET, true));
-
-        log.info("This line of log not supposed to be used for metrics purposes. request: {}", message);
+        log.info("Just a simple line of log!");
 
         String transformed = getProcessed(message);
 
+
+        MDC.put(MxEvent.ACTION, MxEvent.KAFKA_WRITE);
         try {
+
             kafkaTemplate.send(TOPIC, transformed);
-            log.info(metrics.decorate(metrics.KAFKA_WRITE, true));
+
+            MDC.put(MxEvent.STATUS, MxEvent.SUCCESS);
         } catch (Exception ex) {
-            log.error(metrics.decorate(metrics.KAFKA_WRITE, false));
+            MDC.put(MxEvent.STATUS, MxEvent.FAILURE); MDC.put(MxError.MESSAGE, ex.getMessage());
         }
 
+        log.info("End of method!");
 
         return "done";
 
     }
 
-    private String getProcessed(String message){
+    private String getProcessed(String message) {
 
-        return  message + "_" + "_passed_through_publisher";
+        return message + "_" + "_passed_through_publisher";
 
     }
 }
