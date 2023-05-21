@@ -28,25 +28,19 @@ public class PublishController {
 
         String transformed = getProcessed(message);
 
-
-        MDC.put(MxEvent.ACTION, MxEvent.KAFKA_WRITE);
         try {
-
             kafkaTemplate.send(TOPIC, transformed);
-
-            MDC.put(MxEvent.STATUS, MxEvent.SUCCESS);
+            MDC.put(MxEvent.STATUS, MxEvent.SUCCESS); // To send additional info to the logger
         } catch (Exception ex) {
-            MDC.put(MxEvent.STATUS, MxEvent.FAILURE); MDC.put(MxError.MESSAGE, ex.getMessage());
+            MDC.put(MxEvent.STATUS, MxEvent.FAILURE); MDC.put(MxError.MESSAGE, ex.getMessage()); // To send additional info to the logger
         }
-
-        log.info("End of method!");
 
         return "done";
 
     }
 
     private String getProcessed(String message) {
-
+        log.info("message processed successfully!");
         return message + "_" + "_passed_through_publisher";
 
     }
